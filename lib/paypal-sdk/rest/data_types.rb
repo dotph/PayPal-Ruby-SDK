@@ -62,6 +62,7 @@ module PayPal::SDK
           array_of  :transactions, Transaction
           array_of  :failed_transactions, Error
           object_of :payment_instruction, PaymentInstruction
+          object_of :application_context, ApplicationContext
           object_of :state, String
           object_of :experience_profile_id, String
           object_of :note_to_payer, String
@@ -165,6 +166,13 @@ module PayPal::SDK
         end
 
         include RequestDataType
+      end
+
+      class ApplicationContext < Base
+        def self.load_members
+          object_of :shipping_preference, String
+          object_of :user_action, String
+        end
       end
 
       class Billing < Base
