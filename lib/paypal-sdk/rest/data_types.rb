@@ -312,6 +312,7 @@ module PayPal::SDK
         def self.load_members
           object_of :credit_card, CreditCard
           object_of :credit_card_token, CreditCardToken
+          object_of :billing, Billing
         end
       end
 
@@ -2172,6 +2173,9 @@ module PayPal::SDK
           object_of :initial_fail_amount_action, String
           object_of :accepted_payment_type, String
           object_of :char_set, String
+          object_of :accepted_pymt_type, String
+          object_of :skip_shipping_address, Boolean
+          object_of :immutable_shipping_address, Boolean
         end
       end
 
@@ -2353,6 +2357,43 @@ module PayPal::SDK
           end
         end
       end
+
+      class BillingAgreement < Base
+        def self.load_members
+          object_of :id, String
+          object_of :state, String
+          object_of :name, String
+          object_of :description, String
+          object_of :start_date, String
+          object_of :agreement_details, AgreementDetails
+          object_of :payer, Payer
+          object_of :shipping_address, Address
+          object_of :override_merchant_preferences, MerchantPreferences
+          array_of  :override_charge_models, OverrideChargeModel
+          object_of :plan, Plan
+          object_of :create_time, String
+          object_of :update_time, String
+          array_of  :links, Links
+          object_of :token_id, String 
+        end
+
+        include RequestDataType
+
+        def create_agreement_token()
+          path = "v1/billing-agreements/agreement-tokens"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+
+        def create_agreement()
+          path = "v1/billing-agreements/agreements"
+          response = api.post(path, self.to_hash, http_header)
+          self.merge!(response)
+          success?
+        end
+      end
+
       class AgreementDetails < Base
         def self.load_members
           object_of :outstanding_balance, Currency
