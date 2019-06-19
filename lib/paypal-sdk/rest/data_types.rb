@@ -2379,6 +2379,14 @@ module PayPal::SDK
 
         include RequestDataType
 
+        class << self
+          def find(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/billing-agreements/agreements/#{resource_id}"
+            self.new(api.get(path))
+          end
+        end
+
         def create_agreement_token()
           path = "v1/billing-agreements/agreement-tokens"
           response = api.post(path, self.to_hash, http_header)
