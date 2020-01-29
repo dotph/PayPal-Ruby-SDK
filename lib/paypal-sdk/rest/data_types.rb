@@ -2385,6 +2385,12 @@ module PayPal::SDK
             path = "v1/billing-agreements/agreements/#{resource_id}"
             self.new(api.get(path))
           end
+
+          def cancel(resource_id)
+            raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
+            path = "v1/billing-agreements/agreements/#{resource_id}/cancel"
+            self.new(api.post(path))
+          end
         end
 
         def create_agreement_token()
