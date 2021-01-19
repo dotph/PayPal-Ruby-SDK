@@ -83,7 +83,7 @@ module PayPal::SDK
         def create()
           path = "v1/payments/payment"
           if self.payer.try(:funding_instruments).try(:any?)
-            response = api.post(path, self.to_hash, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "TRANSACTION_REFUSED"}'))
+            response = api.post(path, self.to_hash, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "INSTRUMENT_DECLINED"}'))
           else
             response = api.post(path, self.to_hash, http_header)
           end
@@ -106,7 +106,7 @@ module PayPal::SDK
         def execute(payment_execution)
           payment_execution = PaymentExecution.new(payment_execution) unless payment_execution.is_a? PaymentExecution
           path = "v1/payments/payment/#{self.id}/execute"
-          response = api.post(path, payment_execution.to_hash, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "TRANSACTION_REFUSED"}'))
+          response = api.post(path, payment_execution.to_hash, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "INSTRUMENT_DECLINED"}'))
           self.merge!(response)
           success?
         end
@@ -2278,7 +2278,7 @@ module PayPal::SDK
 
         def execute()
           path = "v1/payments/billing-agreements/#{self.token}/agreement-execute"
-          response = api.post(path, {}, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "TRANSACTION_REFUSED"}'))
+          response = api.post(path, {}, http_header.merge("PayPal-Mock-Response" => '{"mock_application_codes": "INSTRUMENT_DECLINED"}'))
           self.merge!(response)
           success?
         end
